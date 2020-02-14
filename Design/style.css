@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css?family=Josefin+Sans');
+/* deaulting */
+:root {
+    --bg : #1c5494;
+    --primary: #2489ff;
+    --secondary: #2433ff;
+    --secondary-dr: #2F363F;
+}
+
+a {
+    text-decoration: none;
+    color: var(--secondary-dr);
+}
+
+* {
+    box-sizing: border-box;
+}

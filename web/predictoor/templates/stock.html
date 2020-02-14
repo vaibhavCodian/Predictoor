@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Stock</h1>
+
+{% if data %}
+<img src="" id="img" alt="Chart">
+
+<script>
+    data = "{{data}}"
+    data = data.replace("b&#39;", "") //to get rid of start curly brace code 
+    data = data.replace("&#39;", "")  //to get rid of end curly bracecode 
+
+    document.getElementById("img").src = "data:image/png;base64,"+data; // set src
+</script>
+{% else %}
+<form action="" method="get">
+    <input type="text" name="ticker" placeholder="Ticker eg: AAPL">
+    <input type="submit" value="Submit">
+</form>
+{% endif %}
+{% endblock content %}
