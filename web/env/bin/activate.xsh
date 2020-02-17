@@ -28,7 +28,7 @@ def _deactivate(args):
 _deactivate(["nondestructive"])
 aliases["deactivate"] = _deactivate
 
-$VIRTUAL_ENV = r"/home/vaibhav/Documents/code_To_learn/predictoor_/web/env"
+$VIRTUAL_ENV = r"/home/vaibhav/Documents/code_To_learn/predictoor_/Predictoor/web/env"
 
 $_OLD_VIRTUAL_PATH = $PATH
 $PATH = $PATH[:]

@@ -13,8 +13,9 @@ def home():
 def stock():
     ticker = request.args.get('ticker')
     if ticker:
-        data = stock_l(ticker)
-        return render_template('stock.html', data=data)
+        data_m, data_p = stock_l(ticker)
+        # return data_p
+        return render_template('stock.html', data_m=data_m, data_p=data_p)
     else:
         return render_template('stock.html')
 

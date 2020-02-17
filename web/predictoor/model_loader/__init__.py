@@ -1,8 +1,21 @@
 from flask import url_for
-from predictoor import app
-from pandas_datareader import data
+import math
 import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
+
+
+from sklearn import preprocessing, svm
+from sklearn.model_selection import train_test_split
+
+from predictoor import app
+from pandas_datareader import data
+from sklearn.linear_model import LinearRegression
+from sklearn.neighbors import KNeighborsRegressor
+from sklearn.linear_model import Ridge
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.pipeline import make_pipeline
+
 import datetime
 from io import BytesIO
 import base64
@@ -34,12 +47,76 @@ def stock_l(ticker):
     close_px.plot(label='AAPL')
     mavg.plot(label='mavg')
     plt.legend()
-    # Saving
+    # Saving mavg
     figfile = BytesIO()
     plt.savefig(figfile, format='png')
     figfile.seek(0)  # rewind to beginning of file
-    figdata_png = figfile.getvalue()  # extract string (stream of bytes)
-    figdata_png = base64.b64encode(figdata_png)
-    return figdata_png
+    figdata_png_m = figfile.getvalue()  # extract string (stream of bytes)
+    figdata_png_m = base64.b64encode(figdata_png_m)
+# Prediction Part
+    plt.clf()
+    dfreg = df.loc[:,['Adj Close','Volume']]
+    dfreg['HL_PCT'] = (df['High'] - df['Low']) / df['Close'] * 100.0
+    dfreg['PCT_change'] = (df['Close'] - df['Open']) / df['Open'] * 100.0
+    dfreg.head()
+    # Drop missing value
+    dfreg.fillna(value=-99999, inplace=True)
+
+    # We want to separate 1 percent of the data to forecast
+    # forecast_out = int(math.ceil(0.01 * len(dfreg)))
+    forecast_out = 10
+
+    # Separating the label here, we want to predict the AdjClose
+    forecast_col = 'Adj Close'
+    dfreg['label'] = dfreg[forecast_col].shift(-forecast_out)
+    X = np.array(dfreg.drop(['label'], 1))
+
+    # Scale the X so that everyone can have the same distribution for linear regression
+    X = preprocessing.scale(X)
+
+    # Finally We want to find Data Series of late X and early X (train) for model generation and evaluation
+    # X_lately = X[-forecast_out:]
+    X_lately = X[-forecast_out:]
+    X = X[:-forecast_out]
+
+    # Separate label and identify it as y
+    y = np.array(dfreg['label'])
+    y = y[:-forecast_out]
+
+    # Linear regression
+    clfreg = LinearRegression(n_jobs=-1)
+    clfreg.fit(X, y)
+
+    # Quadratic Regression 2
+    clfpoly2 = make_pipeline(PolynomialFeatures(2), Ridge())
+    clfpoly2.fit(X, y)
+
+    # Making the forecast
+    forecast_set = clfreg.predict(X_lately)
+    dfreg['Forecast'] = np.nan
+
+    last_date = dfreg.iloc[-1].name
+    last_unix = last_date
+    next_unix = last_unix + datetime.timedelta(days=1)
+
+    for i in forecast_set:
+        next_date = next_unix
+        next_unix += datetime.timedelta(days=1)
+        dfreg.loc[next_date] = [np.nan for _ in range(len(dfreg.columns)-1)]+[i]
+
+    dfreg['Adj Close'].plot()
+    dfreg['Forecast'].plot()
+    plt.legend(loc=10)
+    plt.xlabel('Date')
+    plt.ylabel('Price')
+
+    # Saving Prediction
+    figfile = BytesIO()
+    plt.savefig(figfile, format='png')
+    figfile.seek(0)  # rewind to beginning of file
+    figdata_png_p = figfile.getvalue()  # extract string (stream of bytes)
+    figdata_png_p = base64.b64encode(figdata_png_p)
+    
+    return figdata_png_m, figdata_png_p
 
 

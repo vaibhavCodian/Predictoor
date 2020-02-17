@@ -46,7 +46,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/home/vaibhav/Documents/code_To_learn/predictoor_/web/env"
+VIRTUAL_ENV="/home/vaibhav/Documents/code_To_learn/predictoor_/Predictoor/web/env"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
