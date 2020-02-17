@@ -36,7 +36,7 @@ def stock_l(ticker):
     end_date = datetime.datetime.now()
     start_date = end_date - datetime.timedelta(days=(30 * 10))
     # User pandas_reader.data.DataReader to load the desired data. As simple as that.
-    df = data.DataReader('AAPL', 'yahoo', start_date, end_date)
+    df = data.DataReader(ticker, 'yahoo', start_date, end_date)
     # Preprocessing Days and Setting labels
     close = df['Close']
     close_px = df['Adj Close']
@@ -55,6 +55,7 @@ def stock_l(ticker):
     figdata_png_m = base64.b64encode(figdata_png_m)
 # Prediction Part
     plt.clf()
+    # style.use('fast')
     dfreg = df.loc[:,['Adj Close','Volume']]
     dfreg['HL_PCT'] = (df['High'] - df['Low']) / df['Close'] * 100.0
     dfreg['PCT_change'] = (df['Close'] - df['Open']) / df['Open'] * 100.0
