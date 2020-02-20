@@ -19,6 +19,38 @@ def stock():
     else:
         return render_template('stock.html')
 
+@app.route('/pne', methods=['GET'])
+def index():
+	# Main Page
+	return render_template('pneumonia.html')
+
+@app.route('/predict', methods=['GET', 'POST'])
+def upload():
+
+	# Constants:
+	classes = {'TRAIN': ['BACTERIA', 'NORMAL', 'VIRUS'],
+	           'VALIDATION': ['BACTERIA', 'NORMAL'],
+	           'TEST': ['BACTERIA', 'NORMAL', 'VIRUS']}
+
+	if request.method == 'POST':
+
+		# Get the file from post request
+		f = request.files['file']
+
+		# Save the file to ./uploads
+		basepath = os.path.dirname(__file__)
+		file_path = os.path.join(
+			basepath, 'uploads', secure_filename(f.filename))
+		f.save(file_path)
+
+		# Make a prediction
+		prediction = model_predict(file_path, model)
+
+		predicted_class = classes['TRAIN'][prediction[0]]
+		print('We think that is {}.'.format(predicted_class.lower()))
+
+		return str(predicted_class).lower()
+
 
 
 
