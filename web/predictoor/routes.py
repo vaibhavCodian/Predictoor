@@ -17,7 +17,7 @@ def stock():
         # return data_p
         return render_template('stock.html', data_m=data_m, data_p=data_p)
     else:
-        return render_template('stock.html')
+        return render_template('stock.html', ticker=ticker)
 
 @app.route('/pne', methods=['GET'])
 def index():

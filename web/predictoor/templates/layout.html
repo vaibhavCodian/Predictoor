@@ -4,33 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    {% if title %}
-    <title>Shit - {{title}}</title>
-    {%else%}
-    <title>Shitnet</title>
-    {%endif%}
+    <title>Predictoor</title>
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">        
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">         -->
     <!-- REAL css -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <header class="site-header">
-       <h1 id="logo">Predictoor</h1>
-       <nav>
-           <a href="/stock" class="ni">stock</a>
-        <div class="dropdown">
-        <button class="dropbtn">Dropdown</button>
-            <div class="dropdown-content">
-                <a href="#">Pnemonia</a>
-                <a href="#">Tuberclosis</a>
-                <a href="#">Cancer</a>
-                <a href="#">Chorona</a>
-            </div>
+    <div id="navbar">
+        <div id="logo">
+            <img src="{{ url_for('static', filename='icons/anal2.png') }}" alt="" class="logo">
+            <h1><a href="/">Predictoor</a></h1>
         </div>
-            <a href="/EDA" class="ni">Exploratory D.A</a>
-       </nav>
-    </header>
+        <div id="links">
+            <a href="/stock">Stock</a>
+            <a href="/medical">Medical</a>
+            <a href="/EDA">Exploratory Data Analysis</a>
+        </div>
+    </div>
 
             {% block content %}{% endblock %}
 

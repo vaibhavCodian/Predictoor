@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 
-
 from sklearn import preprocessing, svm
 from sklearn.model_selection import train_test_split
 
@@ -26,7 +25,8 @@ import matplotlib as mpl
 mpl.rc('figure', figsize=(8, 7))
 mpl.__version__
 # Adjusting the style of matplotlib
-style.use('ggplot')
+plt.style.use(['fast', 'seaborn-talk'])
+plt.tight_layout()
 
 
 def stock_l(ticker):
@@ -49,11 +49,11 @@ def stock_l(ticker):
     plt.legend()
     # Saving mavg
     figfile = BytesIO()
-    plt.savefig(figfile, format='png')
+    plt.savefig(figfile, format='png', bbox_inches='tight')
     figfile.seek(0)  # rewind to beginning of file
     figdata_png_m = figfile.getvalue()  # extract string (stream of bytes)
     figdata_png_m = base64.b64encode(figdata_png_m)
-# Prediction Part
+    # Prediction Part
     plt.clf()
     # style.use('fast')
     dfreg = df.loc[:,['Adj Close','Volume']]
@@ -113,7 +113,7 @@ def stock_l(ticker):
 
     # Saving Prediction
     figfile = BytesIO()
-    plt.savefig(figfile, format='png')
+    plt.savefig(figfile, format='png', bbox_inches='tight')
     figfile.seek(0)  # rewind to beginning of file
     figdata_png_p = figfile.getvalue()  # extract string (stream of bytes)
     figdata_png_p = base64.b64encode(figdata_png_p)
