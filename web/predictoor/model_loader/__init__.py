@@ -15,6 +15,7 @@ from sklearn.linear_model import Ridge
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.pipeline import make_pipeline
 
+
 import datetime
 from io import BytesIO
 import base64
@@ -119,5 +120,16 @@ def stock_l(ticker):
     figdata_png_p = base64.b64encode(figdata_png_p)
     
     return figdata_png_m, figdata_png_p
+
+def pne(path_):
+    model = load_model('predictoor/model_loader/model_vgg19.h5')
+    img = image.load_img(path_, target_size=(224, 224))
+    x = image.img_to_array(img)
+    x = np.expand_dims(x, axis=0)
+    img_data = preprocess_input(x)
+    classes = model.predict(img_data)# -*- coding: utf-8 -*-
+
+    return classes
+
 
 

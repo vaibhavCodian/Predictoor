@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h1 class="pgHead">Pnemonia</h1>
+<h4>Upload Image</h4>
+<hr>
+<form action="" method="POST" enctype="multipart/form-data">
+
+    <label for="image">X-ray Image</label>
+    <input type="file" name="image" id="img">
+    <button type="submit">Upload X-ray</button>
+</form>
+{% endblock content %}
