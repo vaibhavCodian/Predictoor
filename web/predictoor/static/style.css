@@ -5,9 +5,24 @@ font-family: 'Montserrat Alternates', ; */
 :root {
   --bg-m-color: #f6f6f6;
   --f-m-c: #1b1c1f;
+  --f-light: #2e2e2e;
   --f-link: #5669d3;
   --secondary: #1b1e1f;
 }
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: var(--f-light);
+  opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: var(--f-light);
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+  color: var(--f-light);
+}
+
 
 ::-moz-selection { /* Code for Firefox */
   color: var(--bg-m-color);
@@ -40,7 +55,8 @@ body {
     background: var(--bg-m-color);
 }
 .pgHead {
-  text-shadow: 2px 2px #3CBC8D;
+  padding: 20px;
+  text-shadow: 2px 2px 1px #213153;
 }
 #navbar {
   display: grid;
@@ -103,26 +119,43 @@ body {
 .stock input[type=text].ticker_ip {
   width: 100%;
   padding: 22px 40px;
-  margin: 20px 0;
-  border-radius: 20pxr;
+  margin: 27px 0;
   box-sizing: border-box;
-  border: none;
+  border: 2px solid var(--f-light);
+  box-shadow: 11px 11px var(--bg-m-color), 11px 11px 0px 2px #090511;
   font-size: 2em;
-  background-color: #e7ecea;
+  background-color: var(--bg-m-color);
   color: var(--f-m-c);
 }
 
 .stock input[type=submit] {
-  background-color: var(--secondary); /* Green */
+  background-color: var(--secondary);
   border: none;
   color: white;
   padding: 15px 32px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
+  box-shadow: 6px 6px var(--bg-m-color), 6px 6px 0px 2px #090511;
   font-size: 16px;
 }
 
+.stock input[type=text]:hover {
+  box-shadow: 5px 8px var(--bg-m-color), 5px 8px 0px 2px #090511;
+  background: #efefef;
+}
+.stock input[type=text]:focus {
+  box-shadow: 6px 6px var(--bg-m-color), 6px 6px 0px 2px #090511;
+  background: var(--bg-m-color);
+}
+
+.stock input[type=submit]:hover {
+  box-shadow: none;
+  background: var(--bg-m-color);
+  color: var(--f-m-c);
+  border: 1px solid var(--f-light);
+}
+
 #img_m, #img_p {
-  
+  width: 45%;
 }

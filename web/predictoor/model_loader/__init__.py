@@ -26,7 +26,7 @@ import matplotlib as mpl
 mpl.rc('figure', figsize=(8, 7))
 mpl.__version__
 # Adjusting the style of matplotlib
-plt.style.use(['fast', 'seaborn-talk'])
+plt.style.use(['fast', 'seaborn-muted'])
 plt.tight_layout()
 
 
@@ -50,7 +50,7 @@ def stock_l(ticker):
     plt.legend()
     # Saving mavg
     figfile = BytesIO()
-    plt.savefig(figfile, format='png', bbox_inches='tight')
+    plt.savefig(figfile, format='png', bbox_inches='tight', transparent=True)
     figfile.seek(0)  # rewind to beginning of file
     figdata_png_m = figfile.getvalue()  # extract string (stream of bytes)
     figdata_png_m = base64.b64encode(figdata_png_m)
@@ -62,12 +62,12 @@ def stock_l(ticker):
     dfreg['PCT_change'] = (df['Close'] - df['Open']) / df['Open'] * 100.0
     dfreg.head()
     # Drop missing value
-    dfreg.fillna(value=-99999, inplace=True)
+    dfreg.fillna(value=-9999999, inplace=True)
 
     # We want to separate 1 percent of the data to forecast
     # forecast_out = int(math.ceil(0.01 * len(dfreg)))
-    forecast_out = 10
-
+    forecast_out = 60
+    #  
     # Separating the label here, we want to predict the AdjClose
     forecast_col = 'Adj Close'
     dfreg['label'] = dfreg[forecast_col].shift(-forecast_out)
@@ -108,28 +108,18 @@ def stock_l(ticker):
 
     dfreg['Adj Close'].plot()
     dfreg['Forecast'].plot()
-    plt.legend(loc=10)
+    plt.legend(loc=0)
     plt.xlabel('Date')
     plt.ylabel('Price')
 
     # Saving Prediction
     figfile = BytesIO()
-    plt.savefig(figfile, format='png', bbox_inches='tight')
+    plt.savefig(figfile, format='png', bbox_inches='tight', transparent=True)
     figfile.seek(0)  # rewind to beginning of file
     figdata_png_p = figfile.getvalue()  # extract string (stream of bytes)
     figdata_png_p = base64.b64encode(figdata_png_p)
     
     return figdata_png_m, figdata_png_p
-
-def pne(path_):
-    model = load_model('predictoor/model_loader/model_vgg19.h5')
-    img = image.load_img(path_, target_size=(224, 224))
-    x = image.img_to_array(img)
-    x = np.expand_dims(x, axis=0)
-    img_data = preprocess_input(x)
-    classes = model.predict(img_data)# -*- coding: utf-8 -*-
-
-    return classes
 
 
 

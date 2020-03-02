@@ -1,6 +1,6 @@
 from flask import render_template, url_for, flash, redirect, request, abort
 from predictoor import app
-from predictoor.model_loader import stock_l, pne
+from predictoor.model_loader import stock_l
 from PIL import Image
 import numpy as np
 from werkzeug.utils import secure_filename
@@ -12,6 +12,9 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications.vgg16 import preprocess_input
 # .....
+
+# model loading
+model = load_model('model_vgg19.h5')
 
 
 app.config["IMAGE_UPLOADS"] = "/home/vaibhav/Documents/code_To_learn/predictoor_/Predictoor/web/predictoor/static/images"
