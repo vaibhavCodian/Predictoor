@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block content %}
+
+{% if table %}
+<h1>table</h1>
+    {{table|safe}}
+{% else %}
+<h1 class="pgHead">Exploratory Data Analysis</h1>
+<h4>Upload CSV</h4>
+<hr>
+<form action="" method="POST" enctype="multipart/form-data">
+    <label for="image">CSV File</label>
+    <input type="file" name="csv" id="csv">
+    <button type="submit">Upload</button>
+</form>
+{% endif %}
+
+{% endblock content %}

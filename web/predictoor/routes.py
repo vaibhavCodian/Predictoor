@@ -1,8 +1,10 @@
 from flask import render_template, url_for, flash, redirect, request, abort
 from predictoor import app
 from predictoor.model_loader import stock_l
+from predictoor.utils.eda import html_table, html_desc
 from PIL import Image
 import numpy as np
+import pandas as pd
 from werkzeug.utils import secure_filename
 import secrets
 import os
@@ -18,6 +20,7 @@ model = load_model('model_vgg19.h5')
 
 
 app.config["IMAGE_UPLOADS"] = "/home/vaibhav/Documents/code_To_learn/predictoor_/Predictoor/web/predictoor/static/images"
+app.config["CSV_UPLOADS"] = "/home/vaibhav/Documents/code_To_learn/predictoor_/Predictoor/web/predictoor/static/csv"
 
 @app.route('/')
 def home():
@@ -33,8 +36,26 @@ def stock():
     else:
         return render_template('stock.html', ticker=ticker)
 
+@app.route('/eda', methods=['GET', 'POST'])
+def eda():
+	if request.method == "POST":
+		if request.files:
+			csv = request.files["csv"]
+			if csv.filename == '':
+				print("Must Have A File Name")
+				return redirect(request.url)
+
+			# filename = secure_filename(csv.filename)
+			# csv.save(os.path.join(app.config["CSV_UPLOADS"], filename))
+			# path = app.config["CSV_UPLOADS"]+"/"+filename
+			df = pd.read_csv(csv)
+			table = html_table(df, 10)
+			return render_template('eda.html', table=table)
+	return render_template('eda.html')
+
+
 @app.route('/pne', methods=['GET', 'POST'])
-def index():
+def pne():
 	if request.method == "POST":
 		if request.files:
 			im = request.files["image"]
@@ -66,6 +87,8 @@ def index():
 			return pred
 	# Main Page
 	return render_template('pneumonia.html')
+
+
 
 
 
