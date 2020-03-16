@@ -1,7 +1,7 @@
-from flask import render_template, url_for, flash, redirect, request, abort
+from flask import render_template, url_for, flash, jsonify,redirect, request, abort, make_response, session
 from predictoor import app
 from predictoor.model_loader import stock_l
-from predictoor.utils.eda import html_table, html_desc
+from predictoor.utils.eda import html_table, html_desc, p_scatter, p_bar, p_hist
 from PIL import Image
 import numpy as np
 import pandas as pd
@@ -18,7 +18,7 @@ from tensorflow.keras.applications.vgg16 import preprocess_input
 # model loading
 model = load_model('model_vgg19.h5')
 
-
+app.secret_key = "secretKey"
 app.config["IMAGE_UPLOADS"] = "/home/vaibhav/Documents/code_To_learn/predictoor_/Predictoor/web/predictoor/static/images"
 app.config["CSV_UPLOADS"] = "/home/vaibhav/Documents/code_To_learn/predictoor_/Predictoor/web/predictoor/static/csv"
 
@@ -35,23 +35,6 @@ def stock():
         return render_template('stock.html', data_m=data_m, data_p=data_p)
     else:
         return render_template('stock.html', ticker=ticker)
-
-@app.route('/eda', methods=['GET', 'POST'])
-def eda():
-	if request.method == "POST":
-		if request.files:
-			csv = request.files["csv"]
-			if csv.filename == '':
-				print("Must Have A File Name")
-				return redirect(request.url)
-
-			# filename = secure_filename(csv.filename)
-			# csv.save(os.path.join(app.config["CSV_UPLOADS"], filename))
-			# path = app.config["CSV_UPLOADS"]+"/"+filename
-			df = pd.read_csv(csv)
-			table = html_table(df, 10)
-			return render_template('eda.html', table=table)
-	return render_template('eda.html')
 
 
 @app.route('/pne', methods=['GET', 'POST'])
@@ -88,8 +71,41 @@ def pne():
 	# Main Page
 	return render_template('pneumonia.html')
 
+@app.route('/eda', methods=['GET', 'POST'])
+def eda():
+	if request.method == "POST":
+		if request.files:
+			csv = request.files["csv"]
+			if csv.filename == '':
+				print("Must Have A File Name")
+				return redirect(request.url)
 
+			filename = secure_filename(csv.filename)
+			csv.save(os.path.join(app.config["CSV_UPLOADS"], filename))
+			path = app.config["CSV_UPLOADS"]+"/"+filename
+			session["path"] = path
+			df = pd.read_csv(path)
+			table = html_table(df, 10)
+			desc = html_desc(df)
+			return render_template('eda.html', table=table, describe=desc, cols=df.columns.to_list())
+	return render_template('eda.html')
 
+# eda __ajax__ routes
+@app.route('/plot', methods=['POST'])
+def plot():
+	req = request.get_json()
+	path = session['path']
+	df = pd.read_csv(path)
+	if (req['plot'] == "Scatter"):
+		d = p_scatter(df[req['xLabel']], df[req['yLabel']])
+	elif (req['plot'] == "Bar"):
+		d = p_bar(df[req['xLabel']], df[req['yLabel']])
+	elif (req['plot'] == "Histogram"):
+		d = p_hist(df[req["xLabel"]], int(req["binSize"]))
+	else:
+		pass
 
+	res = make_response(jsonify({"data": d}), 200)	
+	return res
 
 

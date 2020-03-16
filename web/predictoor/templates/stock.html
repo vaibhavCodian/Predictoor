@@ -8,12 +8,12 @@
 <img src="" id="img_p" alt="Chart">
 
 <script>
-    function set_data(img, data){
-        data = data.replace("b&#39;", "") //to get rid of start curly brace code 
-        data = data.replace("&#39;", "")  //to get rid of end curly bracecode 
-        document.getElementById(img).src = "data:image/png;base64,"+data; // set src
-        console.log("1")
-    }
+    // function set_data(img, data){
+    //     data = data.replace("b&#39;", "") //to get rid of start curly brace code 
+    //     data = data.replace("&#39;", "")  //to get rid of end curly bracecode 
+    //     document.getElementById(img).src = "data:image/png;base64,"+data; // set src
+    //     console.log("1")
+    // }
     set_data("img_m", "{{data_m}}")
     set_data("img_p", "{{data_p}}")
 </script>

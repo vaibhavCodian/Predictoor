@@ -48,7 +48,8 @@ html {
   max-width: 1900px;
 }
 body {
-    margin: 0;
+    margin: 0 auto;
+    max-width: 1400px;
     padding: 0 20px;
     font-family: Montserrat;
     color: var(--f-m-c);
@@ -159,3 +160,26 @@ body {
 #img_m, #img_p {
   width: 45%;
 }
+
+/* plots */
+#plot {
+  display: grid;
+  background-color: #efefef;
+  grid-template-columns: 21fr 89fr;
+}
+
+#plot #plots {
+  /* margin: 5px 5px; */
+  background-color: #e5e7ee;
+  width: 98%;
+  overflow: scroll;
+  overflow-y: hidden;
+  white-space:nowrap;
+}
+
+#plots img {
+  display: inline;
+  width: 300px;
+  height: 300px;
+}
+

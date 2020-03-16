@@ -1,0 +1,133 @@
+<div id="plot">
+    <div class="pform">
+        <label for="plotType">Plot Type:</label>
+        <select id="plotType" name="plotType" form="plot" onchange="chgPlot()">
+        <option value="" disabled selected>Plot Type</option>
+            
+        <option value="Bar">Bar</option>
+        <option value="Scatter">Scatter</option>
+        <option value="Histogram">Histogram</option>
+        <!-- <option value="audi">Audi</option> -->
+        </select>
+
+        <div id="xArea" style="display: none;">
+            <label for="x">X:</label>
+            <select id="xLabel" name="xLabel" form="xLabel">
+            <option value="" disabled selected>Select X value</option>
+            {% for col in cols %}
+                <option value="{{col}}">{{col}}</option>
+            {% endfor %}
+            </select>
+        </div>
+
+        <div id="yArea" style="display: none;">
+            <label for="Y">Y:</label>
+            <select id="yLabel" name="yLabel" form="yLabel">
+            <option value="" disabled selected>Select Y value</option>
+            {% for col in cols %}
+                <option value="{{col}}">{{col}}</option>
+            {% endfor %}
+            </select>
+        </div>
+        <br>
+        <div id="binArea" style="display: none;">
+            <label for="binSize">Bin Size:</label>
+            <input type="number" id="binSize" name="binSize">
+        </div>
+        <button onclick="add_plot();">Add</button>
+    </div>
+    <div id="plots">
+
+    </div>
+</div>
+
+<script>
+    let PLOT_STATE = "X_Y"
+
+    // # AReas 
+    let xArea = document.getElementById("xArea")
+    let yArea = document.getElementById("yArea")
+    let binArea = document.getElementById("binArea")
+
+    let plotType = document.getElementById("plotType")
+    let entry
+    let xLabel = document.getElementById("xLabel")
+    let yLabel = document.getElementById("yLabel")    
+    let binSize = document.getElementById("binSize")
+
+    function chgPlot(){
+        if (plotType.value == "Histogram"){
+            PLOT_STATE = "X_BIN"
+            showX_BIN()
+        } else if(plotType == "Scatter") {
+            PLOT_STATE = "X_Y"
+            showX_Y()
+        } else if(plotType == "Bar") {
+            PLOT_STATE = "X_Y"
+            showX_Y()
+        } else {
+            PLOT_STATE = "X_Y"
+            showX_Y()
+        }
+
+
+    }
+    function showX_Y(){
+        xArea.style.display = "block"
+        yArea.style.display = "block"
+
+        binArea.style.display = "none"
+    }
+    function showX_BIN(){
+        xArea.style.display = "block"
+        binArea.style.display = "block"
+
+        yArea.style.display = "none"
+    }
+
+    function addImage(data, locationId) {
+        let elem = document.createElement("img");
+        elem.src = "data:image/png;base64," + data
+        elem.setAttribute("height", "768");
+        elem.setAttribute("width", "1024");
+        elem.setAttribute("alt", "Plot");
+        document.getElementById(locationId).appendChild(elem);
+    }
+    function add_plot() {
+        if (PLOT_STATE == "X_Y"){
+            entry = {
+                plot: plotType.value,
+                xLabel: xLabel.value,
+                yLabel: yLabel.value 
+            }
+        } else if(PLOT_STATE=="X_BIN") {
+            entry = {
+                plot: plotType.value,
+                xLabel: xLabel.value,
+                binSize: binSize.value
+            }
+        } else {
+
+        }
+
+        console.log(entry)
+        fetch(`${window.origin }/plot`, {
+            method: 'POST',
+            credentials: 'include',
+            body: JSON.stringify(entry),
+            cache: 'no-cache',
+            headers: new Headers({
+                "content-type": "application/json"
+            }),
+        }).then(function (response) {
+            if (response.status !== 200) {
+                console.log("Response not 200")
+                return ;
+            }
+            response.json().then(function (data) {
+                 console.log(data['data'])
+                 addImage(data['data'], 'plots')
+            })
+        })
+    }
+</script>

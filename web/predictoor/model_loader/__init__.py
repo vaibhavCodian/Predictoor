@@ -1,6 +1,5 @@
 from flask import url_for
 import math
-import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 
