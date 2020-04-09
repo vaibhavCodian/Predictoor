@@ -5,12 +5,12 @@ from io import BytesIO
 import base64
 # Adjusting the size of matplotlib
 import matplotlib as mpl
-mpl.rc('figure', figsize=(8, 7))
+mpl.rc('figure', figsize=(20, 40))
 mpl.__version__
 
-# Adjusting the style of matplotlib
-plt.style.use(['fast', 'seaborn-muted'])
-plt.tight_layout()
+# # Adjusting the style of matplotlib
+# plt.style.use(['fast', 'seaborn-muted'])
+# plt.tight_layout()
 # ____________________________
 
 def html_table(df, size):
@@ -52,6 +52,22 @@ def p_bar(x, y):
     figdata_bar = figfile.getvalue()  # extract string (stream of bytes)
     figdata_bar = base64.b64encode(figdata_bar)
     return figdata_bar
+
+def p_pie(x, y):
+    plt.clf()
+    plt.style.use("seaborn-whitegrid")
+    sums = y.groupby(x).sum()
+    plt.pie(x=sums, labels=sums.index)
+    plt.xlabel(x.name)
+    plt.ylabel(y.name)
+    # Saving Scatter_/
+    figfile = BytesIO()
+    plt.savefig(figfile, format='png', bbox_inches='tight', transparent=True)
+    figfile.seek(0)  # rewind to beginning of file
+    figdata_bar = figfile.getvalue()  # extract string (stream of bytes)
+    figdata_bar = base64.b64encode(figdata_bar)
+    return figdata_bar
+
 
 def p_hist(x, bin):
     plt.clf()

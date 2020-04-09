@@ -5,8 +5,10 @@
         <option value="" disabled selected>Plot Type</option>
             
         <option value="Bar">Bar</option>
+        <option value="Pie">Pie</option>
         <option value="Scatter">Scatter</option>
         <option value="Histogram">Histogram</option>
+
         <!-- <option value="audi">Audi</option> -->
         </select>
 
@@ -39,6 +41,13 @@
     <div id="plots">
 
     </div>
+<!-- The Modal -->
+    <div id="myModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="img01">
+        <a href="/images/myw3schoolsimage.jpg" id="dwBtn" download> Download </a>
+    </div>
+    
 </div>
 
 <script>
@@ -72,6 +81,7 @@
 
 
     }
+
     function showX_Y(){
         xArea.style.display = "block"
         yArea.style.display = "block"
@@ -88,11 +98,25 @@
     function addImage(data, locationId) {
         let elem = document.createElement("img");
         elem.src = "data:image/png;base64," + data
-        elem.setAttribute("height", "768");
-        elem.setAttribute("width", "1024");
-        elem.setAttribute("alt", "Plot");
+        elem.addEventListener("click", modal)
+        elem.setAttribute("height", "768")
+        elem.setAttribute("width", "1024")
+        elem.setAttribute("alt", "Predictoor")
+        elem.onclick = function(){
+            modal.style.display = "block"
+            modalImg.src = this.src
+            dwBtn.setAttribute("href", this.src)
+        }
         document.getElementById(locationId).appendChild(elem);
+        document.getElementById(locationId).scrollTo(document.getElementById(locationId).scrollWidth, 0)
     }
+    
+    // When the user clicks on <span> (x), close the modal
+    var span = document.getElementsByClassName("close")[0];
+    span.onclick = function() { 
+        modal.style.display = "none";
+    }
+    
     function add_plot() {
         if (PLOT_STATE == "X_Y"){
             entry = {
@@ -130,4 +154,27 @@
             })
         })
     }
+
+// Get the modal
+var modal = document.getElementById("myModal");
+var modalImg = document.getElementById("img01");
+var dwBtn = document.getElementById("dwBtn");
+
+function modal(){
+    // Get the image and insert it inside the modal - use its "alt" text as a caption
+    var img = document.getElementsByTagName("img");
+    img.onclick = function(){
+    modal.style.display = "block";
+    modalImg.src = this.src;
+    captionText.innerHTML = this.alt;
+    }
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() { 
+    modal.style.display = "none";
+    }
+}
 </script>

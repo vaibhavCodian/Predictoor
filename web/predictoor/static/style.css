@@ -8,20 +8,27 @@ font-family: 'Montserrat Alternates', ; */
   --f-light: #2e2e2e;
   --f-link: #5669d3;
   --secondary: #1b1e1f;
+/* sort */
+  --primary: #f6f6f6;
+  --secondary: #1b1c1f;
+  --triCol: #21242af6;
+  --f-link: #5669d3;
+  --secondary: #1b1e1f;
 }
 
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-  color: var(--f-light);
+  color: var(--triCol);
   opacity: 1; /* Firefox */
 }
 
 :-ms-input-placeholder { /* Internet Explorer 10-11 */
-  color: var(--f-light);
+  color: var(--triCol);
 }
 
 ::-ms-input-placeholder { /* Microsoft Edge */
-  color: var(--f-light);
+  color: var(--triCol);
 }
+
 
 
 ::-moz-selection { /* Code for Firefox */
@@ -121,46 +128,81 @@ body {
   width: 100%;
   padding: 22px 40px;
   margin: 27px 0;
+  font-size: 1.5ems;
   box-sizing: border-box;
-  border: 2px solid var(--f-light);
-  box-shadow: 11px 11px var(--bg-m-color), 11px 11px 0px 2px #090511;
-  font-size: 2em;
-  background-color: var(--bg-m-color);
-  color: var(--f-m-c);
+  border: 2px solid var(--triCol);
+  font-size: --secondary;
+  background-color: var(--primary);
+  color: var(--secondary);
 }
 
 .stock input[type=submit] {
   background-color: var(--secondary);
   border: none;
   color: white;
+  font-family: 'Times New Roman', Times, serif;
   padding: 15px 32px;
+  font-size: 1.2em;
+  font-family: 'Tomorrow' !important;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  box-shadow: 6px 6px var(--bg-m-color), 6px 6px 0px 2px #090511;
-  font-size: 16px;
+  font-size: --secondary;
 }
 
 .stock input[type=text]:hover {
-  box-shadow: 5px 8px var(--bg-m-color), 5px 8px 0px 2px #090511;
-  background: #efefef;
+  box-shadow: 5px 8px ;
+  background: var(--hover);
 }
 .stock input[type=text]:focus {
-  box-shadow: 6px 6px var(--bg-m-color), 6px 6px 0px 2px #090511;
-  background: var(--bg-m-color);
+  background: var(--primary);
 }
 
 .stock input[type=submit]:hover {
   box-shadow: none;
-  background: var(--bg-m-color);
-  color: var(--f-m-c);
-  border: 1px solid var(--f-light);
+  background: var(--primary);
+  color: var(--secondary);
+  border: 1px solid var(--triCol);
+}
+
+/* # Analysis Section */
+.content {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-column-gap: 25px;
+}
+.content h3 {
+    margin: 0 10%;
+    border-left: 2px solid var(--triCol);
+    padding-left: 2px;
+    font-weight: l;
+}
+.right {
+    padding: 12px 0;
+}
+.right h3 {
+    display: inline-block;
+    background: var(--triCol);
+    color: var(--primary);
+    padding: 1px 5px;
+}
+.right h3:before {
+    content: '';
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+    border:var(--primary) 1px solid;
+
+}
+.content .desc {
+    font-family: 'Tomorrow' !important;
+    margin: 20px 10%;
 }
 
 #img_m, #img_p {
-  width: 45%;
+  width: 98%;
 }
-
 /* plots */
 #plot {
   display: grid;
@@ -182,4 +224,91 @@ body {
   width: 300px;
   height: 300px;
 }
+#plots img:hover {
+  opacity: 0.8;
+}
 
+
+
+/* modal */
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: #e6e7e9; /* Fallback color */
+  background-color: #dfdee4c0; /* Black w/ opacity */
+}
+
+/* Modal Content (image) */
+.modal-content {
+  margin: auto;
+  display: block;
+  width: 80%;
+  max-width: 900px;
+  background-color: #efefefa4;
+  box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+}
+
+/* Caption of Modal Image */
+#dwBtn {
+  margin: auto;
+  display: block;
+  margin-top: 20px;
+  width: 20%;
+  text-align: center;
+  color: #16151b;
+  border: #18191b73 solid;
+  background-color: rgba(0,0,0,0.30);
+  padding: 10px 15px;
+}
+
+/* Add Animation */
+.modal-content, #dwBtn {  
+  -webkit-animation-name: zoom;
+  -webkit-animation-duration: 0.2s;
+  animation-name: zoom;
+  animation-duration: 0.2s;
+}
+
+@-webkit-keyframes zoom {
+  from {-webkit-transform:scale(0)} 
+  to {-webkit-transform:scale(1)}
+}
+
+@keyframes zoom {
+  from {transform:scale(0)} 
+  to {transform:scale(1)}
+}
+
+/* The Close Button */
+.close {
+  position: absolute;
+  top: 45px;
+  right: 80px;
+  color: #2d2e2f;
+  font-size: 80px;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.close:hover,
+.close:focus {
+  color: rgb(36, 34, 34);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* 100% Image Width on Smaller Screens */
+@media only screen and (max-width: 700px){
+  .modal-content {
+    width: 100%;
+  }
+}

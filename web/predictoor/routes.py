@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, jsonify,redirect, request, abort, make_response, session
 from predictoor import app
 from predictoor.model_loader import stock_l
-from predictoor.utils.eda import html_table, html_desc, p_scatter, p_bar, p_hist
+from predictoor.utils.eda import html_table, html_desc, p_scatter, p_bar, p_hist, p_pie
 from PIL import Image
 import numpy as np
 import pandas as pd
@@ -102,6 +102,8 @@ def plot():
 		d = p_bar(df[req['xLabel']], df[req['yLabel']])
 	elif (req['plot'] == "Histogram"):
 		d = p_hist(df[req["xLabel"]], int(req["binSize"]))
+	elif (req['plot'] == "Pie"):
+		d = p_pie(df[req["xLabel"]], df[req["yLabel"]])
 	else:
 		pass
 
