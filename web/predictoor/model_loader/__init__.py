@@ -18,11 +18,11 @@ from sklearn.pipeline import make_pipeline
 import datetime
 from io import BytesIO
 import base64
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt, mpld3
 from matplotlib import style
 # Adjusting the size of matplotlib
 import matplotlib as mpl
-mpl.rc('figure', figsize=(8, 7))
+mpl.rc('figure', figsize=(2, 2))
 mpl.__version__
 # Adjusting the style of matplotlib
 plt.style.use(['fast', 'seaborn-muted'])
@@ -44,15 +44,23 @@ def stock_l(ticker):
     all_weekdays = pd.date_range(start=start_date, end=end_date, freq='B')
     close = close.reindex(all_weekdays)
     close = close.fillna(method='ffill')
-    close_px.plot(label='AAPL')
-    mavg.plot(label='mavg')
-    plt.legend()
-    # Saving mavg
-    figfile = BytesIO()
-    plt.savefig(figfile, format='png', bbox_inches='tight', transparent=True)
-    figfile.seek(0)  # rewind to beginning of file
-    figdata_png_m = figfile.getvalue()  # extract string (stream of bytes)
-    figdata_png_m = base64.b64encode(figdata_png_m)
+    
+    fig, ax = plt.subplots(figsize=(6,6))
+    ax.plot(close_px.index, close_px, label="AAPL")
+    ax.plot(mavg.index, mavg, label="m_avg")
+    ax.legend()
+    fig_mavg = mpld3.fig_to_html(fig)
+
+    # close_px.plot(label='tickr')
+    # mavg.plot(label='mavg')
+    # plt.legend()
+
+    # # Saving mavg
+    # figfile = BytesIO()
+    # plt.savefig(figfile, format='png', bbox_inches='tight', transparent=True)
+    # figfile.seek(0)  # rewind to beginning of file
+    # figdata_png_m = figfile.getvalue()  # extract string (stream of bytes)
+    # figdata_png_m = base64.b64encode(figdata_png_m)
     # Prediction Part
     plt.clf()
     # style.use('fast')
@@ -105,20 +113,29 @@ def stock_l(ticker):
         next_unix += datetime.timedelta(days=1)
         dfreg.loc[next_date] = [np.nan for _ in range(len(dfreg.columns)-1)]+[i]
 
-    dfreg['Adj Close'].plot()
-    dfreg['Forecast'].plot()
-    plt.legend(loc=0)
-    plt.xlabel('Date')
-    plt.ylabel('Price')
+    # dfreg['Adj Close'].plot()
+    # dfreg['Forecast'].plot()
+    # plt.legend(loc=0)
+    # plt.xlabel('Date')
+    # plt.ylabel('Price')
 
-    # Saving Prediction
-    figfile = BytesIO()
-    plt.savefig(figfile, format='png', bbox_inches='tight', transparent=True)
-    figfile.seek(0)  # rewind to beginning of file
-    figdata_png_p = figfile.getvalue()  # extract string (stream of bytes)
-    figdata_png_p = base64.b64encode(figdata_png_p)
+    fig, ax = plt.subplots(figsize=(6,6))
+    ax.plot(dfreg['Adj Close'].index, dfreg['Adj Close'], label="Adj Close")
+    ax.plot(dfreg['Forecast'].index, dfreg['Forecast'], label="Forecast")
+    ax.legend()
+    fig_forecast = mpld3.fig_to_html(fig)
+    # print(fig_forecast)
+
+
+    # # Saving Prediction
+    # figfile = BytesIO()
+    # plt.savefig(figfile, format='png', bbox_inches='tight', transparent=True)
+    # figfile.seek(0)  # rewind to beginning of file
+    # figdata_png_p = figfile.getvalue()  # extract string (stream of bytes)
+    # figdata_png_p = base64.b64encode(figdata_png_p)
     
-    return figdata_png_m, figdata_png_p
+    # return figdata_png_m, figdata_png_p
+    return fig_mavg, fig_forecast
 
 
 

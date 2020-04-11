@@ -2,16 +2,30 @@
 {% block content %}
 
 {% if table %}
-<h1>table</h1>
-    {{ table|safe }}
-<h2>describe</h2>
-    {{ describe|safe }}
-<h2>Plots</h2>
+<div class="attribute">
+<h1>Table</h1>
+    <div class="frame">{{ table|safe }}</div>
+</div>
+<div class="attribute">
+<h2>Describe</h2>
+    <div class="frame">{{ describe|safe }}</div>
+</div>
 
-    {% include 'eda/plots.html' %}
+<div class="attribute">
 <h2>Null Value Analysis </h2>
+    <div class="frame"> {{ nullAnal|safe }} </div>
+</div>
 
-    {% include 'eda/missingValue.html' %}
+<div class="attribute">
+<h2>Correlation</h2>
+    <div class="frame"> {{ corr|safe }} </div>
+</div>
+
+
+<div class="attribute">
+<h2>Plots</h2>
+{% include 'eda/plots.html' %}
+</div>
 
 
 {% else %}

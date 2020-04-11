@@ -22,6 +22,18 @@ def html_desc(df):
     html = desc.to_html()
     return html
 
+def nullAnal(df):
+    data = df.columns[df.isnull().any()]
+    df_ = pd.DataFrame(df[data].isnull().sum()).T
+    return df_.to_html()
+
+
+def correlation(df):
+    corr = df.corr()
+    c = corr.style.background_gradient(cmap='Blues_r')
+    cData = c.render()
+    return cData
+
 # for plots
 def p_scatter(x, y):
     # print("x :"+ x)
@@ -60,14 +72,14 @@ def p_pie(x, y):
     plt.pie(x=sums, labels=sums.index)
     plt.xlabel(x.name)
     plt.ylabel(y.name)
-    # Saving Scatter_/
+    plt.tight_layout()
+    # Saving Pie_/
     figfile = BytesIO()
     plt.savefig(figfile, format='png', bbox_inches='tight', transparent=True)
     figfile.seek(0)  # rewind to beginning of file
     figdata_bar = figfile.getvalue()  # extract string (stream of bytes)
     figdata_bar = base64.b64encode(figdata_bar)
     return figdata_bar
-
 
 def p_hist(x, bin):
     plt.clf()
@@ -81,6 +93,5 @@ def p_hist(x, bin):
     figdata_hist = figfile.getvalue()  # extract string (stream of bytes)
     figdata_hist = base64.b64encode(figdata_hist)
     return figdata_hist
-
 
 

@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, jsonify,redirect, request, abort, make_response, session
 from predictoor import app
 from predictoor.model_loader import stock_l
-from predictoor.utils.eda import html_table, html_desc, p_scatter, p_bar, p_hist, p_pie
+from predictoor.utils.eda import html_table, html_desc, nullAnal, correlation,p_scatter, p_bar, p_hist, p_pie
 from PIL import Image
 import numpy as np
 import pandas as pd
@@ -30,9 +30,9 @@ def home():
 def stock():
     ticker = request.args.get('ticker')
     if ticker:
-        data_m, data_p = stock_l(ticker)
-        # return data_p
-        return render_template('stock.html', data_m=data_m, data_p=data_p)
+        html_m, html_f = stock_l(ticker)
+        # print(html_f)
+        return render_template('stock.html', html_m=html_m, html_f=html_f)
     else:
         return render_template('stock.html', ticker=ticker)
 
@@ -87,7 +87,9 @@ def eda():
 			df = pd.read_csv(path)
 			table = html_table(df, 10)
 			desc = html_desc(df)
-			return render_template('eda.html', table=table, describe=desc, cols=df.columns.to_list())
+			null_A = nullAnal(df)
+			corr = correlation(df)
+			return render_template('eda.html', table=table, describe=desc, nullAnal=null_A, corr=corr,cols=df.columns.to_list())
 	return render_template('eda.html')
 
 # eda __ajax__ routes
